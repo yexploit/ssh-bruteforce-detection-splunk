@@ -1,0 +1,53 @@
+# Splunk SPL searches for "SSH Brute-Force Detection in Splunk" lab
+
+# 1) Basic failed SSH login events from auth.log
+
+index=lab sshd "Failed password for"
+| rex "Failed password for(?: invalid user)? (?<user>\\S+) from (?<src_ip>\\S+)"
+| stats count by _time, host, user, src_ip
+
+
+# 2) Brute-force detection: multiple failures from same IP in short window
+
+index=lab sshd "Failed password for"
+| rex "Failed password for(?: invalid user)? (?<user>\\S+) from (?<src_ip>\\S+)"
+| bucket _time span=5m
+| stats count AS fail_count values(user) AS users BY _time, src_ip
+| where fail_count >= 5
+| sort - fail_count
+
+
+# 3) Success after many failures from same IP (possible credential compromise)
+
+index=lab sshd ("Failed password for" OR "Accepted password for")
+| rex " (?<action>Failed|Accepted) password for(?: invalid user)? (?<user>\\S+) from (?<src_ip>\\S+)"
+| eval outcome=if(action="Failed","fail","success")
+| bucket _time span=5m
+| stats
+    count(eval(outcome="fail")) AS fail_count
+    count(eval(outcome="success")) AS success_count
+    values(user) AS users
+  BY _time, src_ip
+| where fail_count >= 3 AND success_count >= 1
+| sort - fail_count, success_count
+
+
+# 4) Panel: Failed SSH logins over time
+
+index=lab sshd "Failed password for"
+| timechart span=1m count AS failed_ssh_logins
+
+
+# 5) Panel: Top attacking IPs
+
+index=lab sshd "Failed password for"
+| rex "Failed password for(?: invalid user)? (?<user>\\S+) from (?<src_ip>\\S+)"
+| top src_ip limit=10
+
+
+# 6) Panel: Top targeted users
+
+index=lab sshd "Failed password for"
+| rex "Failed password for(?: invalid user)? (?<user>\\S+) from (?<src_ip>\\S+)"
+| top user limit=10
+
