@@ -12,6 +12,28 @@ SUSPICIOUS_LOG = "suspicious_ssh_ips.log"
 EVENTS_CSV = "ssh_events.csv"
 
 
+def print_banner() -> None:
+    """Display a simple retro-style banner at startup."""
+    cyan = "\033[96m"
+    red = "\033[91m"
+    reset = "\033[0m"
+
+    lines = [
+        f"{cyan}  ███████╗███████╗██████╗       {red}██████╗ ███████╗████████╗{reset}",
+        f"{cyan}  ██╔════╝██╔════╝██╔══██╗      {red}██╔══██╗██╔════╝╚══██╔══╝{reset}",
+        f"{cyan}  ███████╗█████╗  ██████╔╝      {red}██████╔╝█████╗     ██║   {reset}",
+        f"{cyan}  ╚════██║██╔══╝  ██╔══██╗      {red}██╔══██╗██╔══╝     ██║   {reset}",
+        f"{cyan}  ███████║███████╗██║  ██║      {red}██║  ██║███████╗   ██║   {reset}",
+        f"{cyan}  ╚══════╝╚══════╝╚═╝  ╚═╝      {red}╚═╝  ╚═╝╚══════╝   ╚═╝   {reset}",
+        "",
+        f"{red}        SSH BRUTE-FORCE DETECTION LAB{reset}",
+        f"{cyan}                by yexploit{reset}",
+        "",
+    ]
+    for line in lines:
+        print(line)
+
+
 def parse_auth_line(line: str):
     """Parse a typical /var/log/auth.log SSH line."""
     if "sshd" not in line:
@@ -151,6 +173,7 @@ def analyze_auth_log(path: str):
 
 
 def main():
+    print_banner()
     parser = argparse.ArgumentParser(description="SSH Brute-Force Detection from auth.log")
     parser.add_argument("-f", "--file", required=True, help="Path to auth.log-style file")
     args = parser.parse_args()
