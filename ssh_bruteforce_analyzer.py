@@ -5,6 +5,7 @@ from collections import defaultdict, Counter
 
 from pyfiglet import Figlet
 from colorama import Fore, Style, init
+import shutil
 
 
 FAIL_THRESHOLD = 5          # min failed attempts to trigger alert
@@ -18,21 +19,35 @@ EVENTS_CSV = "ssh_events.csv"
 init(autoreset=True)
 
 
+def center_text(text: str) -> str:
+    """Center text based on current terminal width."""
+    try:
+        terminal_width = shutil.get_terminal_size().columns
+    except OSError:
+        terminal_width = 80
+    return text.center(terminal_width)
+
+
 def banner() -> None:
-    """Display SSH / DETECT banner using pyfiglet + colorama (side-by-side)."""
-    f = Figlet(font="slant")  # smaller & clean
+    """Display centered SSH / DETECT banner using pyfiglet + colorama."""
+    f = Figlet(font="slant")
 
     ssh = f.renderText("SSH").splitlines()
     detect = f.renderText("DETECT").splitlines()
 
-    # Print side-by-side (SSH in cyan, DETECT in red)
-    for s, d in zip(ssh, detect):
-        print(Fore.CYAN + s + "  " + Fore.RED + d)
+    print("\n")
 
-    print()
-    print(Style.BRIGHT + "SSH BRUTE-FORCE DETECTION LAB")
-    print(Fore.RED + "By yexploit")
-    print(Style.RESET_ALL)
+    # Side-by-side and centered
+    for s, d in zip(ssh, detect):
+        line = Fore.CYAN + s + "  " + Fore.RED + d
+        print(center_text(line))
+
+    print("\n")
+
+    # Centered subtitle and author
+    print(center_text(Style.BRIGHT + "SSH BRUTE-FORCE DETECTION LAB"))
+    print(center_text(Fore.RED + "By yexploit"))
+    print("\n")
 
 
 def parse_auth_line(line: str):
