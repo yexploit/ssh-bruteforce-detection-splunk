@@ -13,21 +13,21 @@ EVENTS_CSV = "ssh_events.csv"
 
 
 def print_banner() -> None:
-    """Display a simple retro-style banner at startup."""
+    """Display a compact banner at startup (fits small terminals)."""
     cyan = "\033[96m"
     red = "\033[91m"
     reset = "\033[0m"
 
     lines = [
-        f"{cyan}  ███████╗███████╗██████╗       {red}██████╗ ███████╗████████╗{reset}",
-        f"{cyan}  ██╔════╝██╔════╝██╔══██╗      {red}██╔══██╗██╔════╝╚══██╔══╝{reset}",
-        f"{cyan}  ███████╗█████╗  ██████╔╝      {red}██████╔╝█████╗     ██║   {reset}",
-        f"{cyan}  ╚════██║██╔══╝  ██╔══██╗      {red}██╔══██╗██╔══╝     ██║   {reset}",
-        f"{cyan}  ███████║███████╗██║  ██║      {red}██║  ██║███████╗   ██║   {reset}",
-        f"{cyan}  ╚══════╝╚══════╝╚═╝  ╚═╝      {red}╚═╝  ╚═╝╚══════╝   ╚═╝   {reset}",
-        "",
-        f"{red}        SSH BRUTE-FORCE DETECTION LAB{reset}",
-        f"{cyan}                by yexploit{reset}",
+        f"{red}====================================================={reset}",
+        f"{cyan}   ____  ____  _   _      ____       _           _   {reset}",
+        f"{cyan}  / ___||  _ \\| | | | ___|  _ \\  ___| |_ ___  __| | {reset}",
+        f"{cyan}  \\___ \\| |_) | |_| |/ __| | | |/ _ \\ __/ _ \\/ _` | {reset}",
+        f"{cyan}   ___) |  __/|  _  | (__| |_| |  __/ ||  __/ (_| | {reset}",
+        f"{cyan}  |____/|_|   |_| |_|\\___|____/ \\___|\\__\\___|\\__,_| {reset}",
+        f"{red}        SSH BRUTE-FORCE DETECTION LAB                {reset}",
+        f"{cyan}                     by yexploit                     {reset}",
+        f"{red}====================================================={reset}",
         "",
     ]
     for line in lines:
