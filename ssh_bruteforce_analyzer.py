@@ -19,16 +19,19 @@ init(autoreset=True)
 
 
 def banner() -> None:
-    """Display SSH / DETECT banner using pyfiglet + colorama."""
-    f = Figlet(font="big")
+    """Display SSH / DETECT banner using pyfiglet + colorama (side-by-side)."""
+    f = Figlet(font="slant")  # smaller & clean
 
-    ssh_text = f.renderText("SSH")
-    detect_text = f.renderText("DETECT")
+    ssh = f.renderText("SSH").splitlines()
+    detect = f.renderText("DETECT").splitlines()
 
-    print(Fore.CYAN + ssh_text)
-    print(Fore.RED + detect_text)
-    print(Fore.WHITE + "SSH BRUTE-FORCE DETECTION LAB")
-    print(Fore.WHITE + "by yexploit")
+    # Print side-by-side (SSH in cyan, DETECT in red)
+    for s, d in zip(ssh, detect):
+        print(Fore.CYAN + s + "  " + Fore.RED + d)
+
+    print()
+    print(Style.BRIGHT + "SSH BRUTE-FORCE DETECTION LAB")
+    print(Fore.RED + "By yexploit")
     print(Style.RESET_ALL)
 
 
