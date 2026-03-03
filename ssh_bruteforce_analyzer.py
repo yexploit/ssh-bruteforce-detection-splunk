@@ -13,25 +13,34 @@ EVENTS_CSV = "ssh_events.csv"
 
 
 def print_banner() -> None:
-    """Display a compact banner at startup (fits small terminals)."""
+    """Display 'SSH-DETECT' ASCII banner with half blue / half red."""
     cyan = "\033[96m"
     red = "\033[91m"
     reset = "\033[0m"
 
-    lines = [
-        f"{red}====================================================={reset}",
-        f"{cyan}   ____  ____  _   _      ____       _           _   {reset}",
-        f"{cyan}  / ___||  _ \\| | | | ___|  _ \\  ___| |_ ___  __| | {reset}",
-        f"{cyan}  \\___ \\| |_) | |_| |/ __| | | |/ _ \\ __/ _ \\/ _` | {reset}",
-        f"{cyan}   ___) |  __/|  _  | (__| |_| |  __/ ||  __/ (_| | {reset}",
-        f"{cyan}  |____/|_|   |_| |_|\\___|____/ \\___|\\__\\___|\\__,_| {reset}",
-        f"{red}        SSH BRUTE-FORCE DETECTION LAB                {reset}",
-        f"{cyan}                     by yexploit                     {reset}",
-        f"{red}====================================================={reset}",
-        "",
+    ascii_lines = [
+        "  ____  ____  _   _      ____       _           _   ",
+        " / ___||  _ \\| | | | ___|  _ \\  ___| |_ ___  __| | ",
+        "| |    | | | | | | |/ __| | | |/ _ \\ __/ _ \\/ _` | ",
+        "| |___ | |_| | |_| | (__| |_| |  __/ ||  __/ (_| | ",
+        " \\____||____/ \\___/  \\___|____/ \\___|\\__\\___|\\__,_|",
+        "                                                    ",
+        "                    SSH-DETECT                      ",
     ]
-    for line in lines:
-        print(line)
+
+    # Print top border
+    print(f"{red}====================================================={reset}")
+
+    # Color-split each ASCII line: first half blue, second half red
+    for row in ascii_lines:
+        mid = len(row) // 2
+        left = row[:mid]
+        right = row[mid:]
+        print(f"{cyan}{left}{red}{right}{reset}")
+
+    print(f"{cyan}                      by yexploit                    {reset}")
+    print(f"{red}====================================================={reset}")
+    print()
 
 
 def parse_auth_line(line: str):
