@@ -3,6 +3,9 @@ import csv
 import datetime
 from collections import defaultdict, Counter
 
+from pyfiglet import Figlet
+from colorama import Fore, Style, init
+
 
 FAIL_THRESHOLD = 5          # min failed attempts to trigger alert
 WINDOW_MINUTES = 5          # time window for counting failures
@@ -12,35 +15,21 @@ SUSPICIOUS_LOG = "suspicious_ssh_ips.log"
 EVENTS_CSV = "ssh_events.csv"
 
 
-def print_banner() -> None:
-    """Display 'SSH-DETECT' ASCII banner with half blue / half red."""
-    cyan = "\033[96m"
-    red = "\033[91m"
-    reset = "\033[0m"
+init(autoreset=True)
 
-    ascii_lines = [
-        "  ____  ____  _   _      ____       _           _   ",
-        " / ___||  _ \\| | | | ___|  _ \\  ___| |_ ___  __| | ",
-        "| |    | | | | | | |/ __| | | |/ _ \\ __/ _ \\/ _` | ",
-        "| |___ | |_| | |_| | (__| |_| |  __/ ||  __/ (_| | ",
-        " \\____||____/ \\___/  \\___|____/ \\___|\\__\\___|\\__,_|",
-        "                                                    ",
-        "                    SSH-DETECT                      ",
-    ]
 
-    # Print top border
-    print(f"{red}====================================================={reset}")
+def banner() -> None:
+    """Display SSH / DETECT banner using pyfiglet + colorama."""
+    f = Figlet(font="big")
 
-    # Color-split each ASCII line: first half blue, second half red
-    for row in ascii_lines:
-        mid = len(row) // 2
-        left = row[:mid]
-        right = row[mid:]
-        print(f"{cyan}{left}{red}{right}{reset}")
+    ssh_text = f.renderText("SSH")
+    detect_text = f.renderText("DETECT")
 
-    print(f"{cyan}                      by yexploit                    {reset}")
-    print(f"{red}====================================================={reset}")
-    print()
+    print(Fore.CYAN + ssh_text)
+    print(Fore.RED + detect_text)
+    print(Fore.WHITE + "SSH BRUTE-FORCE DETECTION LAB")
+    print(Fore.WHITE + "by yexploit")
+    print(Style.RESET_ALL)
 
 
 def parse_auth_line(line: str):
@@ -182,7 +171,7 @@ def analyze_auth_log(path: str):
 
 
 def main():
-    print_banner()
+    banner()
     parser = argparse.ArgumentParser(description="SSH Brute-Force Detection from auth.log")
     parser.add_argument("-f", "--file", required=True, help="Path to auth.log-style file")
     args = parser.parse_args()
